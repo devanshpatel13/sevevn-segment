@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 # load image
-img = cv2.imread("yellow.jpg");
+img = cv2.imread("green-font.png");
 # img = cv2.imread("/home/ashish/Downloads/demo-transformed.jpeg");
 
 # lab
@@ -19,7 +19,7 @@ kernel = np.ones((2, 2), np.uint8);
 # threshold params
 low = 165;
 high = 200;
-iters = 12;
+iters = 18;
 
 # import pdb; pdb.set_trace()
 # make copy

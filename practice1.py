@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
-from segments import Segments
+# from segments import Segments
 
 
 
@@ -366,26 +366,27 @@ col = len(img_with_four_numbers[0])
 from PIL import Image
 # cv2.imshow("img",img_with_four_numbers)
 
-# cv2.waitKey()
-
-# def end_point(row, col):
-#     for i in range(row - 1, 0, -1):
-#         for k in range(col - 1, 0, -1):
-#             if not col == k+1 and (str(img_with_four_numbers[i][k]) != '[255 255 255]') and (str(img_with_four_numbers[i][k]) != '[0 0 0]'):
-#                 if (str(img_with_four_numbers[i][k-1])) and (str(img_with_four_numbers[i][k+1])) == '[255,255,255]':
-#                     img_with_four_numbers[i][k] = [255, 255, 255]
-#                 else:
-#                     img_with_four_numbers[i][k] = [0, 0, 0]
-#             if (str(img_with_four_numbers[i][k]) == '[0 0 0]') and (str(img_with_four_numbers[i][k - 1]) == '[255 255 255]'):
-#                 return i, k
-                # import pdb; pdb.set_trace()
 
 def end_point(rows, col):
     fix_row = row - 1
     for k in range(col, 0, -1):
+        # import pdb; pdb.set_trace()
         if (str(img_with_four_numbers[fix_row][k]) == '[0 0 0]') and (str(img_with_four_numbers[fix_row][k-1]) == '[255 255 255]'):
             # import pdb; pdb.set_trace()
+
             return fix_row, k
+        if (str(img_with_four_numbers[fix_row][k]) == '[255 255 255]') and (
+                str(img_with_four_numbers[fix_row][k - 1]) == '[0 0 0]') and (str(img_with_four_numbers[fix_row][k-2]) == '[0 0 0]'):
+            return fix_row, k
+def start_point(rows, col):
+    fix_row = row - 1
+    for k in range(col, 0, -1):
+        import pdb; pdb.set_trace()
+        if (str(img_with_four_numbers[fix_row][k]) == '[255 255 255]') and (str(img_with_four_numbers[fix_row][k-1]) == '[0 0 0]'):
+            import pdb; pdb.set_trace()
+            print("this is 2nd check point...............!")
+            return fix_row, k
+
 
 imgs = cv2.imread("threshold3.jpg")
 
@@ -398,7 +399,7 @@ cv2.imwrite("green-font-blur.png", blur)
 thre = cv2.threshold(blur, 0,255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 cv2.imwrite("green-font-thresh.png", thre)
 
-kernal = cv2.getStructuringElement(cv2.MORPH_RECT, (3,13))
+kernal = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 13))
 cv2.imwrite("green-font-kernal.png", kernal)
 
 dilate = cv2.dilate(thre, kernal, iterations=1)
@@ -411,6 +412,7 @@ cnts = sorted(cnts, key = lambda x: cv2.boundingRect(x)[0])
 
 after_first_box_ending_point =[]
 flage = True
+crop_name = 0
 for i in cnts:
     x, y, w, h =cv2.boundingRect(i)
     for i in range(row, 0, -1):
@@ -434,13 +436,17 @@ for i in cnts:
                     img_with_four_numbers = np.array(img_with_four_numbers)
 
                     after_first_box_ending_point.append(aa[1]-1)
+                    aa.clear()
                     flage = False
                 else:
+                     crop_name += 1
                      cv2.rectangle(img_with_four_numbers, (aa[1], 0), (after_first_box_ending_point[0],row), (30, 250, 12), 1)
                      cv2.imwrite("green-font-bbox.png", img_with_four_numbers)
                      img_with_four_numbers = im = Image.open('green-font-bbox.png')
                      # import pdb; pdb.set_trace()
                      crop_img = img_with_four_numbers.crop((aa[1]+1, 1, after_first_box_ending_point[0]+1, row+1))
+                     crop_img.save(f"last_image{str(crop_name)}.jpg")
+
                      crop_img.show()
                      img_with_four_numbers = np.array(img_with_four_numbers)
                      # img_with_four_numbers = img_with_four_numbers.crop((after_first_box_ending_point[0], 0, j, row))
@@ -448,6 +454,25 @@ for i in cnts:
                      after_first_box_ending_point.clear()
                      print(after_first_box_ending_point, "after_first_box_ending_point")
                      after_first_box_ending_point.append(aa[1] - 1)
+                     aa.clear()
+                    # else:
+                    #     import pdb; pdb.set_trace()
+                    #     bb =list(start_point(row-1, j-1))
+                    #     import pdb; pdb.set_trace()
+
+                    # cv2.rectangle(img_with_four_numbers, (aa[1], 0), (after_first_box_ending_point[0], row),
+                    #              (30, 250, 12), 1)
+                    # cv2.imwrite("green-font-bbox.png", img_with_four_numbers)
+                    # img_with_four_numbers = im = Image.open('green-font-bbox.png')
+                    # # import pdb; pdb.set_trace()
+                    # crop_img = img_with_four_numbers.crop(
+                    #     (aa[1] + 1, 1, after_first_box_ending_point[0] + 1, row + 1))
+                    # crop_img.save(f"last_image{str(crop_name)}.jpg")
+                    #
+                    # crop_img.show()
+                    # img_with_four_numbers = np.array(img_with_four_numbers)
+                    # ...
+
 
                 cv2.imwrite("green-font-bbox.png", img_with_four_numbers)
                 cv2.imshow("green-font-bbox.png", img_with_four_numbers)
