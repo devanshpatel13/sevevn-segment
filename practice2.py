@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from PIL import Image
-img = cv2.imread("test1.png");
+img = cv2.imread("image3.png");
 # img = cv2.imread("green-font.png");
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -12,9 +12,29 @@ cv2.imwrite("green-font-blur.png", blur)
 
 img = cv2.threshold(blur, 0,255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 cv2.imwrite("green-font-thresh.png", img)
-import pdb; pdb.set_trace()
+# import pdb; pdb.set_trace()
 row = len(img)
 col = len(img[0])
+
+
+def find_first_black_row(row, col):
+    for i in range(0 , row-1):
+        for j in range(0, col-1):
+            if int(img[i][j]) == 0:
+                # import pdb; pdb.set_trace()
+                print("this is black point", i, j)
+                return i
+    return find_first_black_row()
+
+
+def find_last_black_row(row, col):
+    for i in range(row-1, 0, -1):
+        for j in range(0, col-1):
+            if int(img[i][j]) == 0:
+                # import pdb; pdb.set_trace()
+                print("this is black point", i, j)
+                return i
+    return find_last_black_row()
 
 
 
@@ -72,7 +92,9 @@ def end_point(rows, col):
 
     return point
 
-
+row_cut_start_point = find_first_black_row(row, col)
+row_cut_end_point = find_last_black_row(row, col)
+# import pdb;pdb.set_trace()
 after_first_box_ending_point =[]
 check_start_point =[]
 flage = True
@@ -80,13 +102,13 @@ start_point1 =[]
 crop_name = 0
 for j in range(col, 0, -1):
     for i in range(row, 0, -1):
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         if int(img[i - 1][j - 1]) == 0:
             # if int(img[i-2][j-2]) == 255:
 
             # row-=1
             # col-=1
-            import pdb;pdb.set_trace()
+            # import pdb;pdb.set_trace()
             aa = list(end_point(i-1, j - 1))
             start_point1 = list(start_point(i-1, j-1,aa))
 
@@ -94,10 +116,10 @@ for j in range(col, 0, -1):
             print("this is check point...........!")
             if flage:
                 # import pdb; pdb.set_trace()
-                cv2.rectangle(img, (start_point1[1], 5), (j, i), (30, 250, 12), 1)
+                cv2.rectangle(img, (start_point1[1], row_cut_start_point), (j, row-1), (30, 250, 12), 0)
                 cv2.imwrite("green-font-bbox.png", img)
                 img = Image.open('green-font-bbox.png')
-                crop_img = img.crop((start_point1[1] + 1, 1, j, i))
+                crop_img = img.crop((start_point1[1] + 1, row_cut_start_point, j, row_cut_end_point))
                 crop_img.save("last_image.jpg")
                 crop_img.show()
                 img = np.array(img)
@@ -107,13 +129,13 @@ for j in range(col, 0, -1):
             else:
                 crop_name += 1
                 ending_point = list(afterfirst_ending_point(i, j, aa))
-                import pdb;pdb.set_trace()
-                cv2.rectangle(img, (start_point1[1], 0), (ending_point[1], row), (30, 250, 12),1)
+                # import pdb;pdb.set_trace()
+                # cv2.rectangle(img, (start_point1[1], row_cut_start_point), (ending_point[1], row), (30, 250, 12),0)
                 # cv2.rectangle(img, (start_point1[1], 0), (after_first_box_ending_point[0], row), (30, 250, 12),1)
-                cv2.imwrite("green-font-bbox.png", img)
+                # cv2.imwrite("green-font-bbox.png", img)
                 img = Image.open('green-font-bbox.png')
                 # import pdb; pdb.set_trace()
-                crop_img = img.crop((start_point1[1] + 1, 1, ending_point[1] + 1, row + 1))
+                crop_img = img.crop((start_point1[1] + 1, row_cut_start_point, ending_point[1] + 1, row_cut_end_point))
                 # crop_img = img.crop((start_point1[1] + 1, 1, after_first_box_ending_point[0] + 1, row + 1))
                 crop_img.save(f"last_image{str(crop_name)}.jpg")
                 crop_img.show()
