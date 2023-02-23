@@ -11,7 +11,6 @@ import pywifi
 import time
 from pywifi import const
 
-
 # WiFi scanner
 def wifi_scan():
     # initialise wifi

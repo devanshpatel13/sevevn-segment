@@ -1,0 +1,26 @@
+<annotation>
+        <folder>font</folder>
+        <filename>7f3858530e5bfb01f3b76aeadb4a01212d53f0fe - 1.jpg</filename>
+        <path>/home/plutusdev/Downloads/Seven-Segment-OCR-master/Datasets_Eleven/3/7f3858530e5bfb01f3b76aeadb4a01212d53f0fe - 1.jpg</path>
+        <source>
+            <database>Unknown</database>
+        </source>
+        <size>
+            <width>25</width>
+            <height>48</height>
+            <depth>1</depth>
+        </size>
+        <segmented>0</segmented>
+        <object>
+            <name>three</name>
+            <pose>Unspecified</pose>
+            <truncated>0</truncated>
+            <difficult>0</difficult>
+            <bndbox>
+                <xmin>0</xmin>
+                <ymin>0</ymin>
+                <xmax>25</xmax>
+                <ymax>48</ymax>
+            </bndbox>
+        </object>
+    </annotation>
