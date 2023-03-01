@@ -573,39 +573,180 @@ import numpy as np
 # cv2.imwrite("font/image17.jpg", gray)
 
 
+# =============================================================================
+"""
+                  CONVERT IMAGES INTO THRESHOLD
+                  """
+# import cv2;
+# import numpy as np;
+#
+#
+# lst = ['/home/plutusdev/Projects/font-detector-main/1677488820914.JPEG','/home/plutusdev/Projects/font-detector-main/1677488850080.JPEG','/home/plutusdev/Projects/font-detector-main/1677488861789.JPEG','/home/plutusdev/Projects/font-detector-main/1677488864549.bmp','/home/plutusdev/Projects/font-detector-main/1677488864549.JPEG']
+# for img in lst:
+#       name = img.split('/')[-1].split('.')[0]
+#       # Read image
+#       im_in = cv2.imread(img);
+#       im_in = cv2.cvtColor(im_in, cv2.COLOR_BGR2GRAY);
+#
+#
+#       # Threshold.
+#       # Set values efont-detection (1)qual to or above 50 to 0.
+#       # Set values below 50 to 255.
+#       th, im_th = cv2.threshold(im_in, 35, 255, cv2.THRESH_BINARY_INV);
+#
+#
+#       # Copy the thresholded image.
+#       im_floodfill = im_th.copy()
+#
+#
+#       # Mask used to flood filling.
+#       # Notice the size needs to be 2 pixels than the image.
+#       h, w = im_th.shape[:2]
+#       mask = np.zeros((h + 2, w + 2), np.uint8)
+#
+#
+#       # Floodfill from point (0, 0)
+#       cv2.floodFill(im_floodfill, mask, (0, 0), 255);
+#
+#
+#       # Invert floodfilled image
+#       im_floodfill_inv = thresh = cv2.bitwise_not(im_floodfill)
+#       cv2.imwrite('white_'+name+'.jpg', im_floodfill_inv)
 
-import cv2;
-import numpy as np;
+# =============================================================================================================
 
 
-lst = ['/home/plutusdev/Projects/font-detector-main/demo.png', '/home/plutusdev/Projects/font-detector-main/download.jpeg', '/home/plutusdev/Projects/font-detector-main/download.png', '/home/plutusdev/Projects/font-detector-main/download (1).png', '/home/plutusdev/Projects/font-detector-main/download (2).jpeg', '/home/plutusdev/Projects/font-detector-main/download (2).png', '/home/plutusdev/Projects/font-detector-main/green-font.png', '/home/plutusdev/Projects/font-detector-main/image1.png', '/home/plutusdev/Projects/font-detector-main/image2.png', '/home/plutusdev/Projects/font-detector-main/image3.png', '/home/plutusdev/Projects/font-detector-main/image4.png', '/home/plutusdev/Projects/font-detector-main/image5.png', '/home/plutusdev/Projects/font-detector-main/image6.png', '/home/plutusdev/Projects/font-detector-main/images (1).jpeg', '/home/plutusdev/Projects/font-detector-main/images (3).jpeg', '/home/plutusdev/Projects/font-detector-main/ssd2.png']
-for img in lst:
-      name = img.split('/')[-1].split('.')[0]
-      # Read image
-      im_in = cv2.imread(img);
-      im_in = cv2.cvtColor(im_in, cv2.COLOR_BGR2GRAY);
+# from PIL import Image
+#
+# # INPUT_IMAGE_URL = "https://www.shutterstock.com/image-vector/machinery-downtime-maintenance-led-controller-600w-1026664582.jpg" #@param {type:"string"}
+# DETECTION_THRESHOLD = 0.3 #@param {type:"number"}
+# # TFLITE_MODEL_PATH = "font-detection.tflite"
+#
+# # TEMP_FILE = '/tmp/image.png'
+#
+# # TEMP_FILE = cv2.imread("image4.png")
+# image = Image.open("/home/plutusdev/Downloads/1677222617120.jpeg").convert('RGB')
+# image.thumbnail((512, 512), Image.ANTIALIAS)
+# image_np = np.asarray(image)
+#
+#
+# im_in = cv2.cvtColor(image_np, cv2.COLOR_BGR2GRAY);
+# cv2.imshow("img",im_in)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+# # Threshold.
+# # Set values equal to or above 50 to 0.
+# # Set values below 50 to 255.
+# th, im_th = cv2.threshold(im_in, 50, 255, cv2.THRESH_BINARY_INV);
+#
+#
+# # Copy the thresholded image.
+# im_floodfill = im_th.copy()
+#
+#
+# # Mask used to flood filling.
+# # Notice the size needs to be 2 pixels than the image.
+# h, w = im_th.shape[:2]
+# mask = np.zeros((h + 2, w + 2), np.uint8)
+#
+#
+# # Floodfill from point (0, 0)
+# # cv2.floodFill(im_floodfill, mask, (0, 0), 255);
+#
+#
+# # Invert floodfilled image
+# image_np = thresh = cv2.bitwise_not(im_floodfill)
+# image_np = cv2.threshold(im_floodfill, 0,255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+
+# for i in range(len(image_np)):
+#   for j in range(len(image_np[0])):
+#     if int(image_np[i][j]) == 0:
+#       image_np[i][j] = np.uint8(255)
+#     else:
+#       image_np[i][j] = np.uint8(0)
+
+# black_pix = np.where((image_np == [0, 0, 0]).all(axis=2))
+# white_pix = np.where((image_np == [255, 255, 255]).all(axis=2))
+
+# image_np[black_pix] = [255, 255, 255]
+# image_np[white_pix] = [0, 0, 0]
 
 
-      # Threshold.
-      # Set values equal to or above 50 to 0.
-      # Set values below 50 to 255.
-      th, im_th = cv2.threshold(im_in, 50, 255, cv2.THRESH_BINARY_INV);
+# cv2.imshow('my_img.jpg', image_np)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+# cv2.imwrite('my_img.jpg', image_np)
+# image = Image.open('my_img.jpg').convert('RGB')
+# image.show()
+# image_np = np.asarray(image)
+#
+# # Load the TFLite model
+# options = ObjectDetectorOptions(
+#       num_threads=4,
+#       score_threshold=DETECTION_THRESHOLD,
+# )
+# detector = ObjectDetector(model_path=TFLITE_MODEL_PATH, options=options)
+#
+# # Run object detection estimation using the model.
+# detections = detector.detect(image_np)
+# print(detections[0][1][0].label)
+# print(detections)
+# print(type(detections[0][1][0]))
+#
+#
+# # Draw keypoints and edges on input image
+# image_np = visualize(image_np, detections)
+#
+# # Show the detection result
+# Image.fromarray(image_np)
 
 
-      # Copy the thresholded image.
-      im_floodfill = im_th.copy()
 
 
-      # Mask used to flood filling.
-      # Notice the size needs to be 2 pixels than the image.
-      h, w = im_th.shape[:2]
-      mask = np.zeros((h + 2, w + 2), np.uint8)
 
 
-      # Floodfill from point (0, 0)
-      cv2.floodFill(im_floodfill, mask, (0, 0), 255);
 
 
-      # Invert floodfilled image
-      im_floodfill_inv = thresh = cv2.bitwise_not(im_floodfill)
-      cv2.imwrite('white_'+name+'.jpg', im_floodfill_inv)
+
+
+
+
+
+
+
+
+# ====================================================================================
+
+
+import numpy as np
+import glob
+import matplotlib.pyplot as plt
+import imageio.v3 as iio
+import skimage.color
+import skimage.filters
+# %matplotlib widget
+
+# load the image
+image = iio.imread("1677488850080.JPEG")
+
+fig, ax = plt.subplots()
+plt.imshow(image)
+
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+cv2.imshow("gray_images", gray_image)
+cv2.waitKey(0)
+blurred_image = skimage.filters.gaussian(gray_image, sigma=1.0)
+fig, ax = plt.subplots()
+plt.imshow(blurred_image, cmap="gray")
+cv2.imshow("blurred_image", blurred_image)
+cv2.waitKey(0)
+
+
+t = 0.4
+binary_mask = blurred_image < t
+iio.imwrite('astronaut-gray.jpg', binary_mask)
+cv2.imshow("binary_mask", binary_mask)
+cv2.waitKey(0)
+
+fig, ax = plt.subplots()
+plt.imshow(binary_mask, cmap="gray")
